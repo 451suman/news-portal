@@ -1,0 +1,96 @@
+{% load static %}
+<header>
+    <!-- Header Start -->
+    <div class="header-area">
+        <div class="main-header">
+            <div class="header-top black-bg d-none d-md-block">
+                <div class="container">
+                    <div class="row d-flex justify-content-between align-items-center">
+                        <div class="header-info-left">
+                            <ul>
+                                <li><img src="{% static 'aznews/img/icon/header_icon1.png' %}" alt="Weather icon">34ºC,
+                                    Sunny</li>
+                                <li><img src="{% static 'aznews/img/icon/header_icon1.png' %}"
+                                        alt="Calendar icon">Tuesday, 18th June, 2019</li>
+                            </ul>
+                        </div>
+                        <div class="header-info-right">
+                            <ul class="header-social">
+                                <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-mid d-none d-md-block">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-3 col-lg-3 col-md-3">
+                            <div class="logo">
+                                <a href="/"><img src="{% static 'aznews/img/logo/logo.png' %}" alt="Site Logo"></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-9 col-lg-9 col-md-9">
+                            <div class="header-banner f-right">
+                                <img src="{% static 'aznews/img/hero/header_card.jpg' %}" alt="Banner Image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-bottom header-sticky">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
+                            <!-- Sticky Logo -->
+                            <div class="sticky-logo">
+                                <a href="/"><img src="{% static 'aznews/img/logo/logo.png' %}" alt="Sticky Logo"></a>
+                            </div>
+                            <!-- Main Menu -->
+                            <div class="main-menu d-none d-md-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="/">Home</a></li>
+                                        {% for category in categories %}
+                                        <li>
+                                            <a href="{% url 'post-by-category' category.id %}">{{ category.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                        <li><a href="{% url 'about' %}">About</a></li>
+                                        <li><a href="{% url 'post-list' %}">Latest News</a></li>
+                                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                                        <li><a href="#">Tags</a>
+                                            <ul class="submenu">
+                                                {% for tag in tags %}
+                                                <li><a href="{% url 'post-by-tag' tag.id %}">{{ tag.name }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-2 col-md-4">
+                            <div class="header-right-btn f-right d-none d-lg-block">
+                                <i class="fas fa-search special-tag"></i>
+                                <div class="search-box">
+                                    <form action="#">
+                                        <input type="text" placeholder="Search" aria-label="Search">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-md-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
