@@ -31,7 +31,7 @@ class Post(TimeStampModel):
         ("in_active","Inactive"),
     ]
     title = models.CharField(max_length=200)
-    content = models.TextField(max_length=200)
+    content = models.TextField()
     featured_image = models.ImageField(upload_to="post_images/%Y/%m/%d", blank=False)
     author= models.ForeignKey("auth.User",on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="active")
@@ -72,4 +72,8 @@ class Comment(TimeStampModel):
         return f"{self.email}|{self.comment[:70]}"
 
 
-    
+class NewsLetter(TimeStampModel):
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.email

@@ -1,3 +1,5 @@
+{% if posts %}
+
 {% for post in posts %}
 <article class="blog_item">
     <div class="blog_item_img">
@@ -15,7 +17,8 @@
             <h2>{{ post.title }}</h2>
         </a>
         <p>
-            {{ post.content|truncatechars:300 }}
+            {{ post.content|striptags|truncatechars:300|safe }}
+
         </p>
         <ul class="blog-info-link">
             <li><a href="#"><i class="fa fa-user"></i>{{ post.author.username|lower }}</a></li>
@@ -27,3 +30,9 @@
     </div>
 </article>
 {% endfor %}
+
+{% else %}
+<div class="alert alert-danger text-center fs-6" role="alert">
+    Keyword did not match
+  </div>
+{% endif %}

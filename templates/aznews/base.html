@@ -29,15 +29,15 @@
 <body>
     <main>
 
-        
+
         {% include "aznews/header.html" %}
-        
+
         {% block content %}
-        
+
         {% endblock content %}
-        
+
         {% include "aznews/footer.html" %}
-        
+
     </main>
     <!-- JS here -->
 
@@ -80,22 +80,74 @@
     <script src="{% static 'aznews/js/plugins.js' %}"></script>
     <script src="{% static 'aznews/js/main.js' %}"></script>
 
-<script>
-    $(".pagination_number").click(function(e){
-        // do not perform the default action
-        e.preventDefault();
-        // http://localhost:8000/post*search/
-        let current_url = window.location.href.split('?')[0];
-        let params = new URL(document.location).searchParams;
-        let query = params.get("query"); //a
-        let href = $(this).attr('href'); //?page=2
-        // http://localhost:800/post-search/?page=2?query=a
-        let new_url = `${current_url}${href}&query=${query}`;
-        window.loacation.replace(new_url);
-    }
+    <script>
+        $(".pagination_number").click(function (e) {
+            // do not perform the default action
+            e.preventDefault();
+            // http://localhost:8000/post*search/
+            let current_url = window.location.href.split('?')[0];
+            let params = new URL(document.location).searchParams;
+            let query = params.get("query"); //a
+            let href = $(this).attr('href'); //?page=2
+            // http://localhost:800/post-search/?page=2?query=a
+            let new_url = `${current_url}${href}&query=${query}`;
+            window.location.replace(new_url);
+        }
 
-)
-</script>
+        )
+    </script>
+
+    <script>
+        $("#newsletter_side_form").submit(function (e) {
+            e.preventDefault();
+            let serializedData = $(this).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'newsletter' %}",
+                data: serializedData,
+                success: function (response) {
+                    // console.log("success", response);
+                    $("#newsletter_side_message").append(
+                        `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${response.message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    `
+                    )
+                    // reset foem after submit
+                    $("#newsletter_side_form")[0].reset();
+                    setTimeout(function () {
+                        $(".alert").alert('close')
+                    }, 2000)
+                },
+                error: function (response) {
+                    // console.log("error", response);
+                    $("#newsletter_side_message").append(
+                        `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${response.responseJSON.message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    `
+                    )
+
+                    // reset foem after submit
+                    $("#newsletter_side_form")[0].reset();
+
+                    setTimeout(function () {
+                        $(".alert").alert('close')
+                    }, 2000)
+                }
+            });
+        });
+    </script>
+
 
 </body>
 

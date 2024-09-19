@@ -2,7 +2,7 @@ from django.contrib import messages
 from urllib import request
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, TemplateView, View, DetailView
-from newspaper.forms import ContactForm, CommentForm
+from newspaper.forms import ContactForm, CommentForm, NewsLetterForm
 from newspaper.models import Category, Post, Tag, Comment, Contact
 from datetime import timedelta
 from django.utils import timezone
@@ -33,7 +33,7 @@ class HomeView(ListView):
         context["weekly_top_posts"] = Post.objects.filter(
             published_at__isnull=False,
             status="active",
-            published_at__gte=one_week_ago,  # gte means GREATER THAN onw week ago
+            published_at__gte=one_week_ago,  # gte means GREATER THAN one week ago
         ).order_by("-published_at", "-views_count")[:7]
 
         context["recent_posts"] = Post.objects.filter(
@@ -170,6 +170,7 @@ class PostDetailView(DetailView):
 
         return context
 
+
 class CommentView(View):
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
@@ -184,6 +185,7 @@ class CommentView(View):
             request, "aznews/detail/detail.html", {"post": post, "form": form}
         )
 
+
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger
 
@@ -194,18 +196,57 @@ class PostSearchView(View):
     def get(self, request, *args, **kwargs):
         query = request.GET["query"]
         post_list = Post.objects.filter(
-            (Q(title__icontains=query) | Q(content__icontains=query) )
+            (Q(title__icontains=query) | Q(content__icontains=query))
             & Q(published_at__isnull=False)
         ).order_by("-published_at")
 
-    #pagination start
-        page= request.GET.get("page",1)
+        # pagination start
+        page = request.GET.get("page", 1)
         paginate_by = 3
-        paginator = Paginator(post_list, paginate_by, paginate_by)
+        paginator = Paginator(post_list, paginate_by)
         try:
-            posts=paginator.page(page)
+            posts = paginator.page(page)
         except PageNotAnInteger:
-            posts=paginator.page(1)
+            posts = paginator.page(1)
 
-        #pagination end
-        return render(request,self.template_name,{"page_obj":posts, "query":query})
+        # pagination end
+        return render(request, self.template_name, {"page_obj": posts, "query": query})
+
+
+from django.http import JsonResponse
+
+
+class NewsLetterView(View):
+    def post(self, request, *args, **kwargs):
+        # Check if the request is an AJAX request
+        is_ajax = request.headers.get("x-requested-with") 
+        
+        if is_ajax == "XMLHttpRequest":
+
+            form = NewsLetterForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "message": "Successfully subscribed to the newsletter.",
+                    },
+                    status=201,
+                )
+            else:
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "Failed to subscribe to the newsletter",
+                    },
+                    status=400,
+                )
+        else:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Cannot process. Must be an AJAX XMLHttpRequest",
+                },
+                status=400,
+            )
