@@ -59,5 +59,8 @@ class PostSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
-        data["author"]= self.context["request"].user.username
+        data["author"]= self.context["request"].user
         return data
+    
+class PostPublishSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
