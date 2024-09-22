@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
-from newspaper.models import Category, Post, Tag
+from newspaper.models import Category, Comment, Contact, NewsLetter, Post, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -64,3 +64,18 @@ class PostSerializer(serializers.ModelSerializer):
     
 class PostPublishSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+
+class NewsletterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsLetter
+        fields = "__all__"
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = "__all__"
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Comment
+        fields = "__all__"

@@ -9,6 +9,9 @@ router.register(r"groups", views.GroupViewSet)
 router.register(r"tags", views.TagViewSet)
 router.register(r"categories", views.CategoryViewSet)
 router.register(r"posts", views.PostViewSet, basename="api-posts")
+router.register(r"draft-posts", views.PostDraftViewSet, basename="api-draft-posts")
+router.register(r"newsletter", views.NewsletterViewSet)
+router.register(r"contact", views.ContactViewSet)
 
 
 # Wire up our API using automatic URL routing.
@@ -26,5 +29,10 @@ urlpatterns = [
         "post-by-tag/<int:tag_id>/",
         views.PostListByTagViewSet.as_view(),
         name="post_by_tag_api",
+    ),
+    path(
+        "post/<int:post_id>/comments/",
+        views.CommentViewSet.as_view(),
+        name="comment-api",
     ),
 ]
