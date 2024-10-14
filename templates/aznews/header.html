@@ -16,6 +16,19 @@
                         </div>
                         <div class="header-info-right">
                             <ul class="header-social">
+                                {% if user.is_authenticated %}
+                                <li>
+                                    <a href="{% url 'report:users' %}" title="Download user csv">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li>
+                                
+                                <!-- <li>
+                                    <a href="{ % url 'report:post-pdf-download' %}" title="Download user pdf">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li> -->
+                                {% endif %}
                                 <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
                                 <li><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
                                 <li><a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a></li>
